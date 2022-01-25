@@ -1,0 +1,127 @@
+_id: spc_1c0baa831ab4418e922163d3a2e1bdcd
+type: ApiSpec
+parentId: wrk_555d5f888a7d4b789a673b2b9f5e1040
+modified: 1643111028572
+created: 1643109863077
+fileName: box-finders-spec.yaml
+contents: |
+  openapi: 3.0.0
+
+  info:
+    version: "0.0.1"
+    title: "Box Finders API"
+
+  paths:
+    /boxes:        
+      get:
+        summary: "Lists all available box collections"
+        responses:
+          "200":
+            description: "200 OK, all box collections"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Boxes"
+      post:
+        summary: "Adds a new box collection"
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Box"
+          required: true
+        responses:
+          "201":
+            description: "201 Created, a new box collection was added"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Box"
+    /boxes/{id}:
+      parameters:
+          - in: path
+            name: id
+            schema:
+              type: number
+            required: true
+            description: "id of the box collection"
+      get:
+        summary: "Retrieves a box collection by identifier"
+        responses:
+          "200":
+            description: "200 OK, box collection by identifier"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Box"
+          "404":
+            description: "404 Not Found, box collection does not exist"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+      put:
+        summary: "Updates a box collection by identifier"
+        requestBody:
+          content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Box"
+        responses:
+          "202":
+            description: "202 Accepted, updated box collection"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Box"
+          "404":
+            description: "404 Not Found, box collection does not exist"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+      delete:
+        summary: "Deletes a box collection by identifier"
+        responses:
+          "204":
+            description: "204 No Content, deleted box collection"
+          "404":
+            description: "404 Not Found, box collection does not exist"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Error"
+
+  components:
+    schemas:
+      Boxes:
+        type: array
+        items: 
+          $ref: "#/components/schemas/Box"
+      Box:
+        type: object
+        properties:
+          id:
+            type: number
+            description: Unique identifier
+          name:
+            type: string
+            description: Person with boxes to give away
+          phone:
+            type: string
+            description: Phone number of person with boxes to give away
+          available:
+            type: number
+            description: Number of available boxes      
+      Error:
+        type: object
+        required:
+          - code
+          - message
+        properties:
+          code:
+            type: integer
+            format: int32
+          message:
+            type: string
+contentType: yaml
